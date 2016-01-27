@@ -1,5 +1,4 @@
-body {
-    background-color: lightblue;
+
 }
 
 h1 {
@@ -7,5 +6,33 @@ h1 {
     margin-left: 20px;
 }
 .tagline {
+	float: right;
+	width: 63%;
 	color: red;
+	background-color: blue
+
+}
+.logo {
+	float: left;
+	width: 30%;
+	color: gray;
+	margin-left: 20%;
+	background-color: gray
+}
+
+
+
+body {
+	float: left;
+  display: block;
+  width: 63%;
+  margin: 0 1.5% 24px 1.5%;
+  background-color: lightblue
+}
+aside {
+	float: right;	
+  display: block;
+  width: 30%;
+  margin: 0 1.5% 24px 1.5%;
+  background-color: purple
 }
