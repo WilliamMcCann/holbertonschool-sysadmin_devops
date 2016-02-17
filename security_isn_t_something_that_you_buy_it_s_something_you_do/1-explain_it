@@ -1,0 +1,13 @@
+In few sentences, explain:
+What should you create? Using what?
+I should create a public and private SSH key.  The "ssh-keygen" command in bash is an effective way to do this.  The command "ssh-keygen -t rsa -b 4096 -C" would ensure the key was of type RSA (more secure than other options) and 4096 bits (long enough to be secure for a while, but not unwieldy for modern processors).
+
+
+What should you do with the public key? How will it be used? What will it do?
+Typically I would provide the public key to my employer, and more specifically to whomever is in charge of authenticating users for the sandbox servers.  It will be added to the server's files and then when I attempt to log on to the server it will combine with my private key to authenicate my identity.
+
+In other use cases, the public key can be used for signing digital documents, but that appears to be outside the scope of the specifics of this question.
+
+
+What should you do with the private key? How will it be used? What will it do?
+The private key should be secured and kept secret to the extent possible.  It is used in conjunction with the public key to authenticate your identity.  Specifically, with some very advanced mathematics involving large primes, a message can be encrypted using the public key that can only be decrypted with the private key.  The opposite is also true, though less relvant to this situation.
