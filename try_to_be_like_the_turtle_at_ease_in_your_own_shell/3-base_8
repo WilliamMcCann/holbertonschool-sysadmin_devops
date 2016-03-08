@@ -1,0 +1,2 @@
+#!/bin/bash
+printf "%o\n" $(( 8#$NUM1 + 8#$NUM2 ))
