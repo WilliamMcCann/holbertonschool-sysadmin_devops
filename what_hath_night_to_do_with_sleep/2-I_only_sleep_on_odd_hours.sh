@@ -1,6 +1,6 @@
 #!/bin/bash
 if !(( $1 % 2 )) ; then
-echo "Heh?"
+    echo "Heh?"
 else
-echo "Sleep time!"
+    echo "Sleep time!"
 fi
