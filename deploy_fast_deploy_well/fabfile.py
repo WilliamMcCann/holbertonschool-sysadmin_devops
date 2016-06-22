@@ -1,5 +1,7 @@
 from fabric.api import *
 
+env.use_ssh_config = True
+
 def uptime():
 	run('uptime')
 
