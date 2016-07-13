@@ -1,0 +1,15 @@
+File location:
+/etc/apache2/sites-available/williammccann.tech-ssl.conf
+
+File contents:
+<VirtualHost williammccann.tech:443>
+        ServerName www.williammccann.tech
+        ServerAlias williammccann.tech
+        DocumentRoot /var/www/
+        CustomLog /var/log/apache2/secure_access.log combined
+        SSLEngine on
+        SSLCertificateFile /etc/ssl/certs/williammccann.tech.crt
+        SSLCertificateKeyFile /etc/apache2/ssl/williammccann.tech.key
+        SSLCertificateChainFile /etc/ssl/certs/GandiStandardSSLCA2.pem
+        SSLVerifyClient None
+  </VirtualHost>
