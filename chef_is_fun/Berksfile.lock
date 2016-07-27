@@ -1,0 +1,8 @@
+DEPENDENCIES
+  holberton-wrapper
+    path: cookbooks/holberton-wrapper
+
+GRAPH
+  holberton-wrapper (0.1.0)
+    user (>= 0.0.0)
+  user (0.4.2)

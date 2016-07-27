@@ -13,6 +13,7 @@ GRAPH
   chef_handler (1.4.0)
   compat_resource (12.10.7)
   holberton-wrapper (0.1.0)
+    user (>= 0.0.0)
   iptables (2.2.0)
   ntp (2.0.0)
     windows (>= 1.38.0)

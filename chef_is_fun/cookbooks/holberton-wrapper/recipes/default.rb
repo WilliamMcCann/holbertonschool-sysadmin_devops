@@ -24,3 +24,17 @@
 user_account 'holberton' do
 	ssh_keygen true
 end
+
+#maybe this part installs nginx using package and service
+
+package 'nginx@1.10'
+
+#seriously there's no simple link to download this from Dotdeb
+service 'nginx@1.10' do
+	source 'https://packages.dotdeb.org/'
+	action :install
+end
+
+package 'net-tools' do
+	action :install
+end
