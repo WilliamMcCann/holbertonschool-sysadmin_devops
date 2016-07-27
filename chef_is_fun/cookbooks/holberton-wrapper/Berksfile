@@ -1,13 +1,1 @@
-source "https://supermarket.chef.io"
-
 metadata
-
-cookbook 'apt', '~> 4.0.1'
-
-cookbook 'ntp', '~> 2.0.0'
-
-cookbook 'openssh', '~> 2.0.0'
-
-cookbook 'user', '~> 0.4.2'
-
-
