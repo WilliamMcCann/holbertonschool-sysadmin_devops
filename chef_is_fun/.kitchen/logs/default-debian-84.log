@@ -1,0 +1,357 @@
+D, [2016-07-26T19:43:57.193018 #45985] DEBUG -- default-debian-84: Berksfile found at /Users/45/Dropbox/holbertonschool-sysadmin_devops/chef_is_fun/Berksfile, loading Berkshelf
+D, [2016-07-26T19:43:58.196531 #45985] DEBUG -- default-debian-84: Berkshelf 4.3.5 library loaded
+I, [2016-07-26T19:43:58.197548 #45985]  INFO -- default-debian-84: -----> Converging <default-debian-84>...
+I, [2016-07-26T19:43:58.211239 #45985]  INFO -- default-debian-84: Preparing files for transfer
+D, [2016-07-26T19:43:58.211294 #45985] DEBUG -- default-debian-84: Creating local sandbox in /var/folders/34/phh92s4d1k59vs0s6_s8__dcckt214/T/default-debian-84-sandbox-20160726-45985-1m582r3
+I, [2016-07-26T19:43:58.211357 #45985]  INFO -- default-debian-84: Preparing dna.json
+D, [2016-07-26T19:43:58.211404 #45985] DEBUG -- default-debian-84: Creating dna.json from {:run_list=>["recipe[holberton-wrapper]"]}
+I, [2016-07-26T19:43:58.211913 #45985]  INFO -- default-debian-84: Resolving cookbook dependencies with Berkshelf 4.3.5...
+D, [2016-07-26T19:43:58.211946 #45985] DEBUG -- default-debian-84: Using Berksfile from /Users/45/Dropbox/holbertonschool-sysadmin_devops/chef_is_fun/Berksfile
+I, [2016-07-26T19:43:58.400993 #45985]  INFO -- default-debian-84: Removing non-cookbook files before transfer
+I, [2016-07-26T19:43:58.403719 #45985]  INFO -- default-debian-84: Preparing data_bags
+D, [2016-07-26T19:43:58.403774 #45985] DEBUG -- default-debian-84: Using data_bags from /Users/45/Dropbox/holbertonschool-sysadmin_devops/chef_is_fun/data_bags
+I, [2016-07-26T19:43:58.404847 #45985]  INFO -- default-debian-84: Preparing validation.pem
+D, [2016-07-26T19:43:58.404888 #45985] DEBUG -- default-debian-84: Using a dummy validation.pem
+I, [2016-07-26T19:43:58.411180 #45985]  INFO -- default-debian-84: Preparing client.rb
+D, [2016-07-26T19:43:58.411290 #45985] DEBUG -- default-debian-84: Creating client.rb from {:node_name=>"default-debian-84", :checksum_path=>"/tmp/kitchen/checksums", :file_cache_path=>"/tmp/kitchen/cache", :file_backup_path=>"/tmp/kitchen/backup", :cookbook_path=>["/tmp/kitchen/cookbooks", "/tmp/kitchen/site-cookbooks"], :data_bag_path=>"/tmp/kitchen/data_bags", :environment_path=>"/tmp/kitchen/environments", :node_path=>"/tmp/kitchen/nodes", :role_path=>"/tmp/kitchen/roles", :client_path=>"/tmp/kitchen/clients", :user_path=>"/tmp/kitchen/users", :validation_key=>"/tmp/kitchen/validation.pem", :client_key=>"/tmp/kitchen/client.pem", :chef_server_url=>"http://127.0.0.1:8889", :encrypted_data_bag_secret=>"/tmp/kitchen/encrypted_data_bag_secret", :named_run_list=>{}}
+D, [2016-07-26T19:43:58.421188 #45985] DEBUG -- default-debian-84: [SSH] vagrant@127.0.0.1<{:user_known_hosts_file=>"/dev/null", :paranoid=>false, :port=>"2201", :compression=>false, :compression_level=>0, :keepalive=>true, :keepalive_interval=>60, :timeout=>15, :keys_only=>true, :keys=>["/Users/45/Dropbox/holbertonschool-sysadmin_devops/chef_is_fun/.kitchen/kitchen-vagrant/kitchen-chef_is_fun-default-debian-84/.vagrant/machines/default/virtualbox/private_key"], :auth_methods=>["publickey"]}> (sudo -E sh -c '
+
+chef_omnibus_root="/opt/chef"
+chef_omnibus_url="https://omnitruck.chef.io/install.sh"
+install_flags=""
+pretty_version="install only if missing"
+sudo_sh="sudo -E sh"
+version="true"
+
+tmp_stderr="/tmp/stderr";
+
+# capture_tmp_stderr SOURCE
+capture_tmp_stderr() {
+  # spool up $tmp_stderr from all the commands we called
+  if test -f "$tmp_stderr"; then
+    output="`cat $tmp_stderr`";
+    stderr_results="${stderr_results}\nSTDERR from $1:\n\n${output}\n";
+    rm $tmp_stderr;
+  fi
+}
+
+# do_curl URL FILENAME
+do_curl() {
+  echo "Trying curl...";
+  curl -sL -D "$tmp_stderr" "$1" > "$2";
+  ec=$?;
+  # check for 404
+  grep "404 Not Found" "$tmp_stderr" 2>&1 >/dev/null;
+  if test $? -eq 0; then
+    http_404_error "$1";
+  fi
+
+  # check for bad return status or empty output
+  if test $ec -ne 0 || test ! -s "$2"; then
+    capture_tmp_stderr "curl";
+    return 1;
+  else
+    echo "Download complete.";
+    return 0;
+  fi
+}
+
+# do_download URL FILENAME
+do_download() {
+  echo "Downloading ${1} to file ${2}";
+
+  exists wget;
+  if test $? -eq 0; then
+    do_wget "$1" "$2" && return 0;
+  fi
+
+  exists curl;
+  if test $? -eq 0; then
+    do_curl "$1" "$2" && return 0;
+  fi
+
+  exists fetch;
+  if test $? -eq 0; then
+    do_fetch "$1" "$2" && return 0;
+  fi
+
+  exists python;
+  if test $? -eq 0; then
+    do_python "$1" "$2" && return 0;
+  fi
+
+  exists perl;
+  if test $? -eq 0; then
+    do_perl "$1" "$2" && return 0;
+  fi
+
+  unable_to_download "$1" "$2";
+}
+
+# do_fetch URL FILENAME
+do_fetch() {
+  echo "Trying fetch...";
+  fetch -o "$2" "$1" 2>"$tmp_stderr";
+  ec=$?;
+  # check for 404
+  grep "Not Found" "$tmp_stderr" 2>&1 >/dev/null;
+  if test $? -eq 0; then
+    http_404_error "$1";
+  fi
+
+  # check for bad return status or empty output
+  if test $ec -ne 0 || test ! -s "$2"; then
+    capture_tmp_stderr "fetch";
+    return 1;
+  else
+    echo "Download complete.";
+    return 0;
+  fi
+}
+
+# do_perl URL FILENAME
+do_perl() {
+  echo "Trying perl...";
+  perl -e "use LWP::Simple; getprint(\$ARGV[0]);" "$1" > "$2" 2>"$tmp_stderr";
+  ec=$?;
+  # check for 404
+  grep "404 Not Found" "$tmp_stderr" 2>&1 >/dev/null;
+  if test $? -eq 0; then
+    http_404_error "$1";
+  fi
+
+  # check for bad return status or empty output
+  if test $ec -ne 0 || test ! -s "$2"; then
+    capture_tmp_stderr "perl";
+    return 1;
+  else
+    echo "Download complete.";
+    return 0;
+  fi
+}
+
+# do_python URL FILENAME
+do_python() {
+  echo "Trying python...";
+  python -c "import sys,urllib2 ; sys.stdout.write(urllib2.urlopen(sys.argv[1]).read())" "$1" > "$2" 2>"$tmp_stderr";
+  ec=$?;
+  # check for 404
+  grep "HTTP Error 404" "$tmp_stderr" 2>&1 >/dev/null;
+  if test $? -eq 0; then
+    http_404_error "$1";
+  fi
+
+  # check for bad return status or empty output
+  if test $ec -ne 0 || test ! -s "$2"; then
+    capture_tmp_stderr "python";
+    return 1;
+  else
+    echo "Download complete.";
+    return 0;
+  fi
+}
+
+# do_wget URL FILENAME
+do_wget() {
+  echo "Trying wget...";
+  wget -O "$2" "$1" 2>"$tmp_stderr";
+  ec=$?;
+  # check for 404
+  grep "ERROR 404" "$tmp_stderr" 2>&1 >/dev/null;
+  if test $? -eq 0; then
+    http_404_error "$1";
+  fi
+
+  # check for bad return status or empty output
+  if test $ec -ne 0 || test ! -s "$2"; then
+    capture_tmp_stderr "wget";
+    return 1;
+  else
+    echo "Download complete.";
+    return 0;
+  fi
+}
+
+# exists COMMAND
+exists() {
+  if command -v "$1" >/dev/null 2>&1; then
+    return 0;
+  else
+    return 1;
+  fi
+}
+
+# http_404_error URL
+http_404_error() {
+  echo ">>>>>> Downloading ${1} resulted in an HTTP/404, aborting";
+  exit 40;
+}
+
+# should_update_chef ROOT VERSION
+should_update_chef() {
+  if test ! -d "$1"; then
+    return 0;
+  elif test "$2" = "true"; then
+    return 1;
+  elif test "$2" = "latest"; then
+    return 0;
+  fi
+
+  if test -f "${1}/version-manifest.txt"; then
+    chef_version="`head -n 1 ${1}/version-manifest.txt | cut -d \" \" -f 2`";
+  else
+    chef_version="`${1}/bin/chef-solo -v | cut -d \" \" -f 2`";
+  fi
+
+  echo "$chef_version" | grep "^${2}" 2>&1 >/dev/null;
+  if test $? -eq 0; then
+    return 1;
+  else
+    echo "${2}" | grep "^$chef_version" 2>&1 >/dev/null;
+    if test $? -eq 0; then
+      return 1;
+    else
+      return 0;
+    fi
+  fi
+}
+
+# unable_to_download URL FILE
+unable_to_download() {
+  echo "Unable to download $1 to $2, aborting";
+
+  if test "x${stderr_results}" != "x"; then
+    echo "\nDEBUG OUTPUT FOLLOWS:\n${stderr_results}";
+  fi
+
+  exit 10;
+}
+
+# main
+main() {
+  should_update_chef "$chef_omnibus_root" "$version"
+  if test $? -eq 0; then
+    echo "-----> Installing Chef Omnibus (${pretty_version})";
+
+    # solaris 10 lacks recent enough credentials, so http url is used
+    platform="`/usr/bin/uname -s 2>/dev/null`";
+    platform_version="`/usr/bin/uname -r 2>/dev/null`";
+    if test "x${platform}" = "xSunOS" && test "x${platform_version}" = "x5.10"; then
+      chef_omnibus_url=`echo "$chef_omnibus_url" | sed -e "s/https/http/"`;
+    fi
+
+    do_download "$chef_omnibus_url" /tmp/install.sh;
+    $sudo_sh /tmp/install.sh $install_flags;
+  else
+    echo "-----> Chef Omnibus installation detected (${pretty_version})";
+  fi
+}
+
+# augment path in an attempt to find a download program
+PATH="${PATH}:/opt/local/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/sfw/bin";
+export PATH;
+
+main
+')
+D, [2016-07-26T19:43:58.422462 #45985] DEBUG -- default-debian-84: [SSH] opening connection to vagrant@127.0.0.1<{:user_known_hosts_file=>"/dev/null", :paranoid=>false, :port=>"2201", :compression=>false, :compression_level=>0, :keepalive=>true, :keepalive_interval=>60, :timeout=>15, :keys_only=>true, :keys=>["/Users/45/Dropbox/holbertonschool-sysadmin_devops/chef_is_fun/.kitchen/kitchen-vagrant/kitchen-chef_is_fun-default-debian-84/.vagrant/machines/default/virtualbox/private_key"], :auth_methods=>["publickey"]}>
+I, [2016-07-26T19:43:58.487576 #45985]  INFO -- default-debian-84: -----> Chef Omnibus installation detected (install only if missing)
+D, [2016-07-26T19:43:58.489872 #45985] DEBUG -- default-debian-84: [SSH] vagrant@127.0.0.1<{:user_known_hosts_file=>"/dev/null", :paranoid=>false, :port=>"2201", :compression=>false, :compression_level=>0, :keepalive=>true, :keepalive_interval=>60, :timeout=>15, :keys_only=>true, :keys=>["/Users/45/Dropbox/holbertonschool-sysadmin_devops/chef_is_fun/.kitchen/kitchen-vagrant/kitchen-chef_is_fun-default-debian-84/.vagrant/machines/default/virtualbox/private_key"], :auth_methods=>["publickey"], :user=>"vagrant"}> (sh -c '
+sudo_rm="sudo -E rm"
+dirs="/tmp/kitchen/clients /tmp/kitchen/cookbooks /tmp/kitchen/data /tmp/kitchen/data_bags /tmp/kitchen/encrypted_data_bag_secret /tmp/kitchen/environments /tmp/kitchen/roles"
+root_path="/tmp/kitchen"
+
+$sudo_rm -rf $dirs
+mkdir -p $root_path
+')
+I, [2016-07-26T19:43:58.497477 #45985]  INFO -- default-debian-84: Transferring files to <default-debian-84>
+D, [2016-07-26T19:43:58.497545 #45985] DEBUG -- default-debian-84: TIMING: scp async upload (Kitchen::Transport::Ssh)
+D, [2016-07-26T19:43:58.580881 #45985] DEBUG -- default-debian-84: TIMING: scp async upload (Kitchen::Transport::Ssh) took (0m0.08s)
+D, [2016-07-26T19:43:58.580939 #45985] DEBUG -- default-debian-84: Transfer complete
+D, [2016-07-26T19:43:58.581065 #45985] DEBUG -- default-debian-84: Attempting to execute command - try 1 of 1.
+D, [2016-07-26T19:43:58.581121 #45985] DEBUG -- default-debian-84: [SSH] vagrant@127.0.0.1<{:user_known_hosts_file=>"/dev/null", :paranoid=>false, :port=>"2201", :compression=>false, :compression_level=>0, :keepalive=>true, :keepalive_interval=>60, :timeout=>15, :keys_only=>true, :keys=>["/Users/45/Dropbox/holbertonschool-sysadmin_devops/chef_is_fun/.kitchen/kitchen-vagrant/kitchen-chef_is_fun-default-debian-84/.vagrant/machines/default/virtualbox/private_key"], :auth_methods=>["publickey"], :user=>"vagrant"}> (sh -c '
+sudo -E /opt/chef/bin/chef-client --local-mode --config /tmp/kitchen/client.rb --log_level auto --force-formatter --no-color --json-attributes /tmp/kitchen/dna.json --chef-zero-port 8889 
+')
+I, [2016-07-26T19:43:59.378947 #45985]  INFO -- default-debian-84: Starting Chef Client, version 12.12.15
+I, [2016-07-26T19:44:00.422375 #45985]  INFO -- default-debian-84: resolving cookbooks for run list: ["holberton-wrapper"]
+I, [2016-07-26T19:44:00.480009 #45985]  INFO -- default-debian-84: Synchronizing Cookbooks:
+I, [2016-07-26T19:44:00.481139 #45985]  INFO -- default-debian-84:   - holberton-wrapper (0.1.0)
+I, [2016-07-26T19:44:00.483107 #45985]  INFO -- default-debian-84:   - user (0.4.2)
+I, [2016-07-26T19:44:00.486649 #45985]  INFO -- default-debian-84: Installing Cookbook Gems:
+I, [2016-07-26T19:44:00.486691 #45985]  INFO -- default-debian-84: Compiling Cookbooks...
+I, [2016-07-26T19:44:00.489168 #45985]  INFO -- default-debian-84: 
+I, [2016-07-26T19:44:00.489528 #45985]  INFO -- default-debian-84: ================================================================================
+I, [2016-07-26T19:44:00.489899 #45985]  INFO -- default-debian-84: Recipe Compile Error in /tmp/kitchen/cache/cookbooks/holberton-wrapper/recipes/default.rb
+I, [2016-07-26T19:44:00.490229 #45985]  INFO -- default-debian-84: ================================================================================
+I, [2016-07-26T19:44:00.490404 #45985]  INFO -- default-debian-84: 
+I, [2016-07-26T19:44:00.490825 #45985]  INFO -- default-debian-84: SyntaxError
+I, [2016-07-26T19:44:00.491141 #45985]  INFO -- default-debian-84: -----------
+I, [2016-07-26T19:44:00.491340 #45985]  INFO -- default-debian-84: /tmp/kitchen/cache/cookbooks/holberton-wrapper/recipes/default.rb:13: syntax error, unexpected ':', expecting end-of-input
+I, [2016-07-26T19:44:00.491660 #45985]  INFO -- default-debian-84: "openssh": {
+I, [2016-07-26T19:44:00.492103 #45985]  INFO -- default-debian-84:    ^
+I, [2016-07-26T19:44:00.492232 #45985]  INFO -- default-debian-84: 
+I, [2016-07-26T19:44:00.492411 #45985]  INFO -- default-debian-84: Platform:
+I, [2016-07-26T19:44:00.492580 #45985]  INFO -- default-debian-84: ---------
+I, [2016-07-26T19:44:00.492838 #45985]  INFO -- default-debian-84: x86_64-linux
+I, [2016-07-26T19:44:00.492958 #45985]  INFO -- default-debian-84: 
+I, [2016-07-26T19:44:00.493329 #45985]  INFO -- default-debian-84: 
+I, [2016-07-26T19:44:00.493698 #45985]  INFO -- default-debian-84: Running handlers:
+I, [2016-07-26T19:44:00.494549 #45985]  INFO -- default-debian-84: [2016-07-27T02:44:00+00:00] ERROR: Running exception handlers
+I, [2016-07-26T19:44:00.494817 #45985]  INFO -- default-debian-84: Running handlers complete
+I, [2016-07-26T19:44:00.495378 #45985]  INFO -- default-debian-84: [2016-07-27T02:44:00+00:00] ERROR: Exception handlers complete
+I, [2016-07-26T19:44:00.496179 #45985]  INFO -- default-debian-84: Chef Client failed. 0 resources updated in 01 seconds
+I, [2016-07-26T19:44:00.497775 #45985]  INFO -- default-debian-84: [2016-07-27T02:44:00+00:00] FATAL: Stacktrace dumped to /tmp/kitchen/cache/chef-stacktrace.out
+I, [2016-07-26T19:44:00.498195 #45985]  INFO -- default-debian-84: [2016-07-27T02:44:00+00:00] FATAL: Please provide the contents of the stacktrace.out file if you file a bug report
+I, [2016-07-26T19:44:00.498467 #45985]  INFO -- default-debian-84: [2016-07-27T02:44:00+00:00] ERROR: /tmp/kitchen/cache/cookbooks/holberton-wrapper/recipes/default.rb:13: syntax error, unexpected ':', expecting end-of-input
+I, [2016-07-26T19:44:00.498678 #45985]  INFO -- default-debian-84: "openssh": {
+I, [2016-07-26T19:44:00.498875 #45985]  INFO -- default-debian-84:    ^
+I, [2016-07-26T19:44:01.354886 #45985]  INFO -- default-debian-84: [2016-07-27T02:44:01+00:00] FATAL: Chef::Exceptions::ChildConvergeError: Chef run process exited unsuccessfully (exit code 1)
+D, [2016-07-26T19:44:01.387497 #45985] DEBUG -- default-debian-84: Cleaning up local sandbox in /var/folders/34/phh92s4d1k59vs0s6_s8__dcckt214/T/default-debian-84-sandbox-20160726-45985-1m582r3
+E, [2016-07-26T19:44:01.392245 #45985] ERROR -- default-debian-84: Converge failed on instance <default-debian-84>.
+E, [2016-07-26T19:44:01.392385 #45985] ERROR -- default-debian-84: ------Exception-------
+E, [2016-07-26T19:44:01.392407 #45985] ERROR -- default-debian-84: Class: Kitchen::ActionFailed
+E, [2016-07-26T19:44:01.392418 #45985] ERROR -- default-debian-84: Message: SSH exited (1) for command: [sh -c '
+sudo -E /opt/chef/bin/chef-client --local-mode --config /tmp/kitchen/client.rb --log_level auto --force-formatter --no-color --json-attributes /tmp/kitchen/dna.json --chef-zero-port 8889 
+']
+E, [2016-07-26T19:44:01.392428 #45985] ERROR -- default-debian-84: ----------------------
+E, [2016-07-26T19:44:01.392454 #45985] ERROR -- default-debian-84: ------Backtrace-------
+E, [2016-07-26T19:44:01.392476 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/provisioner/base.rb:86:in `rescue in call'
+E, [2016-07-26T19:44:01.392485 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/provisioner/base.rb:89:in `call'
+E, [2016-07-26T19:44:01.392495 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:373:in `block in converge_action'
+E, [2016-07-26T19:44:01.392505 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:513:in `call'
+E, [2016-07-26T19:44:01.392522 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:513:in `synchronize_or_call'
+E, [2016-07-26T19:44:01.392534 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:478:in `block in action'
+E, [2016-07-26T19:44:01.392543 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/2.1.0/benchmark.rb:279:in `measure'
+E, [2016-07-26T19:44:01.392553 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:477:in `action'
+E, [2016-07-26T19:44:01.392562 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:369:in `converge_action'
+E, [2016-07-26T19:44:01.392571 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:348:in `block in transition_to'
+E, [2016-07-26T19:44:01.392580 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:347:in `each'
+E, [2016-07-26T19:44:01.392588 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:347:in `transition_to'
+E, [2016-07-26T19:44:01.392597 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:138:in `converge'
+E, [2016-07-26T19:44:01.392607 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:201:in `public_send'
+E, [2016-07-26T19:44:01.392615 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:201:in `run_action_in_thread'
+E, [2016-07-26T19:44:01.392624 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:173:in `block (2 levels) in run_action'
+E, [2016-07-26T19:44:01.392633 #45985] ERROR -- default-debian-84: ----End Backtrace-----
+E, [2016-07-26T19:44:01.392642 #45985] ERROR -- default-debian-84: ---Nested Exception---
+E, [2016-07-26T19:44:01.392651 #45985] ERROR -- default-debian-84: Class: Kitchen::Transport::SshFailed
+E, [2016-07-26T19:44:01.392659 #45985] ERROR -- default-debian-84: Message: SSH exited (1) for command: [sh -c '
+sudo -E /opt/chef/bin/chef-client --local-mode --config /tmp/kitchen/client.rb --log_level auto --force-formatter --no-color --json-attributes /tmp/kitchen/dna.json --chef-zero-port 8889 
+']
+E, [2016-07-26T19:44:01.392668 #45985] ERROR -- default-debian-84: ----------------------
+E, [2016-07-26T19:44:01.392676 #45985] ERROR -- default-debian-84: ------Backtrace-------
+E, [2016-07-26T19:44:01.392685 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/provisioner/base.rb:86:in `rescue in call'
+E, [2016-07-26T19:44:01.392694 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/provisioner/base.rb:89:in `call'
+E, [2016-07-26T19:44:01.392703 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:373:in `block in converge_action'
+E, [2016-07-26T19:44:01.392711 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:513:in `call'
+E, [2016-07-26T19:44:01.392720 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:513:in `synchronize_or_call'
+E, [2016-07-26T19:44:01.392732 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:478:in `block in action'
+E, [2016-07-26T19:44:01.392742 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/2.1.0/benchmark.rb:279:in `measure'
+E, [2016-07-26T19:44:01.392755 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:477:in `action'
+E, [2016-07-26T19:44:01.392765 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:369:in `converge_action'
+E, [2016-07-26T19:44:01.392775 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:348:in `block in transition_to'
+E, [2016-07-26T19:44:01.392783 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:347:in `each'
+E, [2016-07-26T19:44:01.392792 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:347:in `transition_to'
+E, [2016-07-26T19:44:01.392801 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:138:in `converge'
+E, [2016-07-26T19:44:01.392810 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:201:in `public_send'
+E, [2016-07-26T19:44:01.392819 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:201:in `run_action_in_thread'
+E, [2016-07-26T19:44:01.392828 #45985] ERROR -- default-debian-84: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:173:in `block (2 levels) in run_action'
+E, [2016-07-26T19:44:01.392837 #45985] ERROR -- default-debian-84: ----End Backtrace-----

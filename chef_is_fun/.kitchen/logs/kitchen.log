@@ -1,0 +1,74 @@
+I, [2016-07-26T19:43:54.563698 #45985]  INFO -- Kitchen: -----> Starting Kitchen (v1.10.0)
+D, [2016-07-26T19:43:54.636833 #45985] DEBUG -- Kitchen: [Vagrant command] BEGIN (vagrant --version)
+D, [2016-07-26T19:43:56.856176 #45985] DEBUG -- Kitchen: [Vagrant command] END (0m1.96s)
+I, [2016-07-26T19:43:58.197510 #45985]  INFO -- Kitchen: -----> Converging <default-debian-84>...
+D, [2016-07-26T19:44:01.395054 #45985] DEBUG -- Kitchen: ------Exception-------
+D, [2016-07-26T19:44:01.395155 #45985] DEBUG -- Kitchen: Class: Kitchen::ActionFailed
+D, [2016-07-26T19:44:01.395192 #45985] DEBUG -- Kitchen: Message: 1 actions failed.
+>>>>>>     Converge failed on instance <default-debian-84>.  Please see .kitchen/logs/default-debian-84.log for more details
+D, [2016-07-26T19:44:01.395211 #45985] DEBUG -- Kitchen: ----------------------
+D, [2016-07-26T19:44:01.395241 #45985] DEBUG -- Kitchen: ------Backtrace-------
+D, [2016-07-26T19:44:01.395257 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:187:in `report_errors'
+D, [2016-07-26T19:44:01.395273 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:178:in `run_action'
+D, [2016-07-26T19:44:01.395289 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command/action.rb:39:in `block in call'
+D, [2016-07-26T19:44:01.395305 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/2.1.0/benchmark.rb:279:in `measure'
+D, [2016-07-26T19:44:01.395321 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command/action.rb:37:in `call'
+D, [2016-07-26T19:44:01.395338 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/cli.rb:56:in `perform'
+D, [2016-07-26T19:44:01.395354 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/cli.rb:184:in `block (2 levels) in <class:CLI>'
+D, [2016-07-26T19:44:01.395371 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+D, [2016-07-26T19:44:01.395387 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+D, [2016-07-26T19:44:01.395403 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/cli.rb:325:in `invoke_task'
+D, [2016-07-26T19:44:01.395420 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+D, [2016-07-26T19:44:01.395448 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+D, [2016-07-26T19:44:01.395465 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/bin/kitchen:13:in `block in <top (required)>'
+D, [2016-07-26T19:44:01.395480 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/errors.rb:174:in `with_friendly_errors'
+D, [2016-07-26T19:44:01.395496 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/bin/kitchen:13:in `<top (required)>'
+D, [2016-07-26T19:44:01.395511 #45985] DEBUG -- Kitchen: /usr/local/bin/kitchen:17:in `load'
+D, [2016-07-26T19:44:01.395526 #45985] DEBUG -- Kitchen: /usr/local/bin/kitchen:17:in `<main>'
+D, [2016-07-26T19:44:01.395541 #45985] DEBUG -- Kitchen: ----End Backtrace-----
+D, [2016-07-26T19:44:01.395556 #45985] DEBUG -- Kitchen: -Composite Exception--
+D, [2016-07-26T19:44:01.395571 #45985] DEBUG -- Kitchen: Class: Kitchen::InstanceFailure
+D, [2016-07-26T19:44:01.395586 #45985] DEBUG -- Kitchen: Message: Converge failed on instance <default-debian-84>.  Please see .kitchen/logs/default-debian-84.log for more details
+D, [2016-07-26T19:44:01.395602 #45985] DEBUG -- Kitchen: ----------------------
+D, [2016-07-26T19:44:01.395617 #45985] DEBUG -- Kitchen: ------Backtrace-------
+D, [2016-07-26T19:44:01.395639 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/provisioner/base.rb:86:in `rescue in call'
+D, [2016-07-26T19:44:01.395655 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/provisioner/base.rb:89:in `call'
+D, [2016-07-26T19:44:01.395670 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:373:in `block in converge_action'
+D, [2016-07-26T19:44:01.395686 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:513:in `call'
+D, [2016-07-26T19:44:01.395701 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:513:in `synchronize_or_call'
+D, [2016-07-26T19:44:01.395716 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:478:in `block in action'
+D, [2016-07-26T19:44:01.395731 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/2.1.0/benchmark.rb:279:in `measure'
+D, [2016-07-26T19:44:01.395746 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:477:in `action'
+D, [2016-07-26T19:44:01.395761 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:369:in `converge_action'
+D, [2016-07-26T19:44:01.395776 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:348:in `block in transition_to'
+D, [2016-07-26T19:44:01.395790 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:347:in `each'
+D, [2016-07-26T19:44:01.395805 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:347:in `transition_to'
+D, [2016-07-26T19:44:01.395820 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:138:in `converge'
+D, [2016-07-26T19:44:01.395835 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:201:in `public_send'
+D, [2016-07-26T19:44:01.395850 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:201:in `run_action_in_thread'
+D, [2016-07-26T19:44:01.395865 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:173:in `block (2 levels) in run_action'
+D, [2016-07-26T19:44:01.395880 #45985] DEBUG -- Kitchen: ----End Backtrace-----
+D, [2016-07-26T19:44:01.395894 #45985] DEBUG -- Kitchen: ---Nested Exception---
+D, [2016-07-26T19:44:01.395908 #45985] DEBUG -- Kitchen: Class: Kitchen::ActionFailed
+D, [2016-07-26T19:44:01.395922 #45985] DEBUG -- Kitchen: Message: SSH exited (1) for command: [sh -c '
+sudo -E /opt/chef/bin/chef-client --local-mode --config /tmp/kitchen/client.rb --log_level auto --force-formatter --no-color --json-attributes /tmp/kitchen/dna.json --chef-zero-port 8889 
+']
+D, [2016-07-26T19:44:01.395937 #45985] DEBUG -- Kitchen: ----------------------
+D, [2016-07-26T19:44:01.395952 #45985] DEBUG -- Kitchen: ------Backtrace-------
+D, [2016-07-26T19:44:01.395966 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/provisioner/base.rb:86:in `rescue in call'
+D, [2016-07-26T19:44:01.395981 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/provisioner/base.rb:89:in `call'
+D, [2016-07-26T19:44:01.395995 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:373:in `block in converge_action'
+D, [2016-07-26T19:44:01.396010 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:513:in `call'
+D, [2016-07-26T19:44:01.396025 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:513:in `synchronize_or_call'
+D, [2016-07-26T19:44:01.396045 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:478:in `block in action'
+D, [2016-07-26T19:44:01.396060 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/2.1.0/benchmark.rb:279:in `measure'
+D, [2016-07-26T19:44:01.396075 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:477:in `action'
+D, [2016-07-26T19:44:01.396090 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:369:in `converge_action'
+D, [2016-07-26T19:44:01.396105 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:348:in `block in transition_to'
+D, [2016-07-26T19:44:01.396120 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:347:in `each'
+D, [2016-07-26T19:44:01.396135 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:347:in `transition_to'
+D, [2016-07-26T19:44:01.396149 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/instance.rb:138:in `converge'
+D, [2016-07-26T19:44:01.396164 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:201:in `public_send'
+D, [2016-07-26T19:44:01.396179 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:201:in `run_action_in_thread'
+D, [2016-07-26T19:44:01.396194 #45985] DEBUG -- Kitchen: /opt/chefdk/embedded/lib/ruby/gems/2.1.0/gems/test-kitchen-1.10.0/lib/kitchen/command.rb:173:in `block (2 levels) in run_action'
+D, [2016-07-26T19:44:01.396209 #45985] DEBUG -- Kitchen: ----End Backtrace-----
