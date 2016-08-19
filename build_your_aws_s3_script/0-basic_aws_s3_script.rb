@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+# encoding: utf-8
 
 require 'rubygems'
 require 'aws-sdk'
@@ -11,87 +12,103 @@ access_key_id = config['access_key_id']
 secret_access_key = config['secret_access_key']
 region = config['region']
 
-#test printing
-test_var = 'testing string 1'
-puts test_var
-puts 'testing string 2'
-puts region
+create AWS Client
+s3_client = Aws::S3::Client.new(
+                            region: region,
+                            access_key_id: access_key_id,
+                            secret_access_key: secret_access_key
+                         )
+
+#create AWS Resource
+s3_resource = Aws::S3::Resource.new(
+                            region: region,
+                            access_key_id: access_key_id,
+                            secret_access_key: secret_access_key
+                          )
+
+# #test printing
+# test_var = 'testing string 1'
+# puts test_var
+# puts 'testing string 2'
+# puts region
 
 #creates bucket
 #s3 = Aws::S3::Client.new(region: region, access_key_id: access_key_id, secret_access_key: secret_access_key)
 #s3.create_bucket(bucket: 'williammccanntestbucket')
 
+#option parsing
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: 0-basic_aws_s3_script.rb [options]"
+
+  opts.separator ""
+  opts.separator "Specific options:"
+
+  opts.on( '-v', '--verbose', 'Run verbosely' ) do |v|
+    options[:verbose] = v
+  end
+
+  opts.on( "-bBUCKET NAME", "--bucketname=BUCKET NAME", "Name of the bucket to perform the action on" ) do |v|
+    options[:bucketname] = v
+  end
+
+  opts.on( "-fFILE_PATH", "--filepath=FILE_PATH", "Path to the file to upload" ) do |v|
+    options[:filepath] = v
+  end
+
+  opts.on('-a', '--action [ACTION]', [:list, :upload, :delete, :download],
+          'Select action to perform [list, upload, delete, download]') do |v|
+          if not v then
+                  puts "Error: Action not valid"
+          else
+                  options[:action] = v
+          end
+  end
+
+  opts.on("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end.parse!(ARGV)
+
+#test printing
+# p options
+# p ARGV
 
 
-# #option parsing
-# options = {}
-#
-# optparse = OptionParser.new do|opts|
-#   opts.banner = "Usage: 0-basic_aws_s3_script.rb [options]"
-#
-#   options[:verbose] = false
-#   opts.on( '-v', '--verbose', 'Run verbosely' ) do
-#     options[:verbose] = true
-#   end
-#
-#   options[:bucketname] = false
-#   opts.on( "-b", "--bucketname=BUCKET_NAME", "Name of the bucket to perform the action on" ) do
-#     options[:bucketname] = true
-#   end
-#
-#   options[:filepath] = false
-#   opts.on( "-f", "--filepath=FILE_PATH", "Path to the file to upload" ) do
-#     options[:filepath] = true
-#   end
-#
-#   #need to figure out how to implement multiple parameters here
-#   options[:action] = nil
-#   opts.on( "-a", "--action=ACTION", "Select action to perform [list, upload, delete, download]" ) do|file|
-#     options[:action] = file
-#   end
-#
-#   opts.on("-h", "--help", "Show this message") do
-#     puts opts
-#     exit
-#   end
-# end
-#
-# optparse.parse!
+bucket = s3_resource.bucket(options[:bucketname])
+# p bucket
+# # http://docs.aws.amazon.com/sdkforruby/api/Aws/S3/Client.html#list_objects_v2-instance_method
+if options[:action] == :upload
+  bucket.put_object({
+    body: File.read(options[:filepath]),
+    key: options[:filepath].split(File::SEPARATOR)[-1]
+    })
 
 
-Options = Struct.new(:name)
-
-class Parser
-  def self.parse(options)
-    args = Options.new("world")
-
-    opt_parser = OptionParser.new do |opts|
-      opts.banner = "Usage: 0-basic_aws_s3_script.rb [options]"
-
-      opts.on("-v", "--verbose", "Run verbosely") do |n|
-        args.action = v
-      end
-
-      opts.on("-b", "--bucketname=BUCKET_NAME", "Name of the bucket to perform the action on") do |n|
-        args.action = b
-      end
-
-      opts.on("-f", "--filepath=FILE_PATH", "Path to the file to upload") do |n|
-        args.action = f
-      end
-
-      opts.on("-a", "--action=ACTION", "Select action to perform [list, upload, delete, download]") do |n|
-        args.action = a
-      end
-
-      opts.on("-h", "--help", "Show this message") do
-        puts opts
-        exit
-      end
+  elsif options[:action] == :list
+    bucket = s3_resource.bucket(options[:bucketname])
+    # p bucket
+    bucket.objects.each do |obj|
+       puts "#{obj.key}=>#{obj.etag}"
     end
 
-    opt_parser.parse!(options)
-    return args
-  end
+  elsif options[:action] == :delete
+    bucket = s3_resource.bucket(options[:bucketname])
+    bucket.delete_objects({
+      delete: {
+        objects: [
+          {
+            key: options[:filepath].split(File::SEPARATOR)[-1],
+          },
+        ],
+      },
+  })
+
+  elsif options[:action] == :download
+    obj = s3_resource.bucket(options[:bucketname]).object(options[:filepath].split(File::SEPARATOR)[-1])
+    obj.get(response_target: options[:filepath].split(File::SEPARATOR)[-1])
+  else
+    AWS_parser.parse %w[--print_opts]
 end
-options = Parser.parse %w[--help]
