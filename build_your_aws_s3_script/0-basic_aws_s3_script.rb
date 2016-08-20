@@ -12,12 +12,12 @@ access_key_id = config['access_key_id']
 secret_access_key = config['secret_access_key']
 region = config['region']
 
-create AWS Client
-s3_client = Aws::S3::Client.new(
-                            region: region,
-                            access_key_id: access_key_id,
-                            secret_access_key: secret_access_key
-                         )
+# create AWS Client
+# s3_client = Aws::S3::Client.new(
+#                             region: region,
+#                             access_key_id: access_key_id,
+#                             secret_access_key: secret_access_key
+#                          )
 
 #create AWS Resource
 s3_resource = Aws::S3::Resource.new(
